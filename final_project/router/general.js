@@ -4,6 +4,62 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
+
+
+// Using Promise 
+
+public_users.get('/',function (req, res) {
+
+  const get_books = new Promise((resolve, reject) => {
+      resolve(res.send(JSON.stringify({books}, null, 4)));
+    });
+
+    get_books.then(() => console.log("Promise resolved"));
+
+});
+
+public_users.get('/isbn/:isbn', async function (req, res) {
+  const isbn = req.params.isbn;
+  const get_books = new Promise((resolve, reject) => {
+    resolve(res.send(JSON.stringify(books[isbn], null, 4)));
+  }); 
+  get_books.then(() => console.log("Promise resolved"));
+
+  
+});
+
+
+public_users.get('/author/:author', async function (req, res) {
+  const author = req.params.author;
+  const get_books = new Promise((resolve, reject) => {
+    let keys = Object.keys(books);
+    for (let i = 0; i < keys.length; i++) {
+      if (books[keys[i]].author === author) {
+        resolve(res.send(JSON.stringify(books[keys[i]], null, 4)));
+      }
+    }
+  });
+  get_books.then(() => console.log("Promise resolved"));
+});
+
+public_users.get('/title/:title', async function (req, res) {
+  const title = req.params.title;
+  const get_books = new Promise((resolve, reject) => {
+    let keys = Object.keys(books);
+    for (let i = 0; i < keys.length; i++) {
+      if (books[keys[i]].title === title) {
+        resolve(res.send(JSON.stringify(books[keys[i]], null, 4)));
+      }
+    }
+  });
+  get_books.then(() => console.log("Promise resolved"));
+});
+
+
+
+
+
+
 const doesExist = (username)=>{
   let userswithsamename = users.filter((user)=>{
     return user.username === username
@@ -32,41 +88,41 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
+// public_users.get('/',function (req, res) {
   
-  return res.status(300).send(books);
-});
+//   return res.status(300).send(books);
+// });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+// public_users.get('/isbn/:isbn',function (req, res) {
   
-  const isbn=req.params.isbn;
-  return res.status(300).json(books[isbn]);
- });
+//   const isbn=req.params.isbn;
+//   return res.status(300).json(books[isbn]);
+//  });
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  let keys = Object.keys(books);
-  for (let i = 0; i < keys.length; i++) {
-    if (books[keys[i]].author === req.params.author) {
-      return res.status(300).json(books[keys[i]]);
-    }
-  }
+// public_users.get('/author/:author',function (req, res) {
+//   //Write your code here
+//   let keys = Object.keys(books);
+//   for (let i = 0; i < keys.length; i++) {
+//     if (books[keys[i]].author === req.params.author) {
+//       return res.status(300).json(books[keys[i]]);
+//     }
+//   }
   
   
-});
+// });
 
-// Get all books based on title
-public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  let keys = Object.keys(books);
-  for (let i = 0; i < keys.length; i++) {
-    if (books[keys[i]].title === req.params.title) {
-      return res.status(300).json(books[keys[i]]);
-    }
-  }
-});
+// // Get all books based on title
+// public_users.get('/title/:title',function (req, res) {
+//   //Write your code here
+//   let keys = Object.keys(books);
+//   for (let i = 0; i < keys.length; i++) {
+//     if (books[keys[i]].title === req.params.title) {
+//       return res.status(300).json(books[keys[i]]);
+//     }
+//   }
+// });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
