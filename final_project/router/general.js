@@ -42,18 +42,18 @@ public_users.get('/author/:author', async function (req, res) {
   get_books.then(() => console.log("Promise resolved"));
 });
 
-public_users.get('/title/:title', async function (req, res) {
-  const title = req.params.title;
-  const get_books = new Promise((resolve, reject) => {
-    let keys = Object.keys(books);
-    for (let i = 0; i < keys.length; i++) {
-      if (books[keys[i]].title === title) {
-        resolve(res.send(JSON.stringify(books[keys[i]], null, 4)));
+  public_users.get('/title/:title', async function (req, res) {
+    const title = req.params.title;
+    const get_books = new Promise((resolve, reject) => {
+      let keys = Object.keys(books);
+      for (let i = 0; i < keys.length; i++) {
+        if (books[keys[i]].title === title) {
+          resolve(res.send(JSON.stringify(books[keys[i]], null, 4)));
+        }
       }
-    }
+    });
+    get_books.then(() => console.log("Promise resolved"));
   });
-  get_books.then(() => console.log("Promise resolved"));
-});
 
 
 
